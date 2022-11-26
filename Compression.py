@@ -66,5 +66,9 @@ with open("Output.txt", "w") as file:
     for i in codes:
         file.write(i)
         file.write('\n')
-    file.write('\n')
     file.write(compressed_string)
+
+with open("Output.txt", "r") as test:
+    out = test.read().splitlines()
+    print(type(out))
+    print(out)
