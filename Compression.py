@@ -1,4 +1,5 @@
 from Huffman_Nodes import HuffmanNode
+import os
 
 
 def preorder_coding(obj):
@@ -34,41 +35,54 @@ def printing(obj):
     printing(obj.right)
 
 
-with open("Input.txt", "r") as file:
-    huffman_input = file.read()
-    nodes = []
-    symbols = set()
+class HuffmanCompression:
+    def __init__(self, fileName="Input.txt", string=''):
+        self.filename = fileName
+        self.text = string
+        self.compressed = compressed_string
+        self.code = codes
+        self.code_dict = codes_dict
 
-    for i in huffman_input:
-        symbols.add(i)
+    def compress(self):
+        if self.filename == 'Input.txt':
+            with open(self.filename, 'w') as file:
+                file.write(self.text)
+        elif self.filename != 'Input.txt':
+            path = str(os.getcwd())
+            path = f'{path}\\{self.filename}'
+            if not os.path.isfile(path):
+                return None
+        with open("Input.txt", "r") as file:
+            huffman_input = file.read()
+            nodes = []
+            symbols = set()
 
-    for i in symbols:
-        probability = huffman_input.count(i) / len(huffman_input)
-        node = HuffmanNode(probability, i, None, None, '')
-        nodes.append(node)
+            for i in huffman_input:
+                symbols.add(i)
 
-    nodes.sort(key=lambda x: x.value)
-    while len(nodes) > 1:
-        node = nodes[0] + nodes[1]
-        nodes.pop(0)
-        nodes.pop(0)
-        nodes.append(node)
-        nodes.sort(key=lambda x: x.value)
-    preorder_coding(nodes[0])
-    printing(nodes[0])
-    for i in huffman_input:
-        compressed_string += codes_dict[i]
+            for i in symbols:
+                probability = huffman_input.count(i) / len(huffman_input)
+                node = HuffmanNode(probability, i, None, None, '')
+                nodes.append(node)
 
-print(codes)
-print(compressed_string)
+            nodes.sort(key=lambda x: x.value)
+            while len(nodes) > 1:
+                node = nodes[0] + nodes[1]
+                nodes.pop(0)
+                nodes.pop(0)
+                nodes.append(node)
+                nodes.sort(key=lambda x: x.value)
+            preorder_coding(nodes[0])
+            printing(nodes[0])
+            for i in huffman_input:
+                self.compressed += codes_dict[i]
 
-with open("Output.txt", "w") as file:
-    for i in codes:
-        file.write(i)
-        file.write('\n')
-    file.write(compressed_string)
+        with open("Huffman/Short Code.txt", "w") as file:
+            for i in self.code:
+                file.write(i)
+                file.write('\n')
 
-with open("Output.txt", "r") as test:
-    out = test.read().splitlines()
-    print(type(out))
-    print(out)
+        with open("Huffman/Compressed Stream.txt", "w") as file:
+            file.write(self.compressed)
+
+        return self.compressed
